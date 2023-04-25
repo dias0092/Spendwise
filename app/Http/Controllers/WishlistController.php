@@ -18,6 +18,10 @@ class WishlistController extends Controller
             'user_id' => 'required',
             'wish_name' => 'required',
             'timestamp' => 'required',
+            'description'=> 'required' ,
+            'icon' => 'required',
+            'initial_target_amount' =>'required' ,
+            'color' => 'required',
         ]);
 
         $wishlistItem = Wishlist::create($request->all());
@@ -35,6 +39,9 @@ class WishlistController extends Controller
             'wish_name' => 'required',
             'timestamp' => 'required',
             'target_amount' => 'required',
+            'description'=> 'required' ,
+            'icon' => 'required',
+            'initial_target_amount' =>'required' ,
         ]);
 
         $wishlist->update($request->all());

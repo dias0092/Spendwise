@@ -13,6 +13,10 @@ return new class extends Migration
             $collection->foreignId('user_id')->constrained('users');
             $collection->string('wish_name');
             $collection->decimal('target_amount', 15, 2);
+            $collection->string('description');
+            $collection->decimal('initial_target_amount', 15, 2);
+            $collection->string('color');
+            $collection->string('icon');
             $collection->timestamps();
         });
     }
