@@ -26,11 +26,9 @@ class WishlistController extends Controller
 
         ]);
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $wishlistItem = Wishlist::create(
-            $request->all(),[
-            'progress' => $progress
-            ]
-        );
+        $wishlistItem = Wishlist::create($request->all());
+        $wishlistItem->progress = $progress;
+        $wishlistItem->save();
         return response()->json($wishlistItem, 201);
     }
 
@@ -51,9 +49,9 @@ class WishlistController extends Controller
             'color' => 'required',
         ]);
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $wishlist->update($request->all(),[
-            'progress' => $progress
-        ]);
+        $wishlist->update($request->all());
+        $wishlist->progress = $progress;
+        $wishlist->save();
         return response()->json($wishlist);
     }
 
