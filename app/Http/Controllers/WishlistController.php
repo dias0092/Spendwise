@@ -20,11 +20,17 @@ class WishlistController extends Controller
             'timestamp' => 'required',
             'description'=> 'required' ,
             'icon' => 'required',
+            'target_amount' => 'required',
             'initial_target_amount' =>'required' ,
             'color' => 'required',
-        ]);
 
-        $wishlistItem = Wishlist::create($request->all());
+        ]);
+        $progress = ($request->initial_target_amount / $request->target_amount) * 100;
+        $wishlistItem = Wishlist::create(
+            $request->all(),[
+            'progress' => $progress
+            ]
+        );
         return response()->json($wishlistItem, 201);
     }
 
@@ -41,10 +47,13 @@ class WishlistController extends Controller
             'target_amount' => 'required',
             'description'=> 'required' ,
             'icon' => 'required',
-            'initial_target_amount' =>'required' ,
+            'initial_target_amount' =>'required',
+            'color' => 'required',
         ]);
-
-        $wishlist->update($request->all());
+        $progress = ($request->initial_target_amount / $request->target_amount) * 100;
+        $wishlist->update($request->all(),[
+            'progress' => $progress
+        ]);
         return response()->json($wishlist);
     }
 

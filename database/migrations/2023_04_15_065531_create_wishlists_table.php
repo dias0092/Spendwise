@@ -17,6 +17,7 @@ return new class extends Migration
             $collection->decimal('initial_target_amount', 15, 2);
             $collection->string('color');
             $collection->string('icon');
+            $collection->decimal('progress', 5, 2)->default(0);
             $collection->timestamps();
         });
     }
