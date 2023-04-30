@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Wishlist;
+use App\Models\Goal;
 use Illuminate\Http\Request;
 
-class WishlistController extends Controller
+class GoalController extends Controller
 {
     public function index()
     {
-        $wishlist = Wishlist::all();
+        $wishlist = Goal::all();
         return response()->json($wishlist);
     }
 
@@ -26,18 +26,18 @@ class WishlistController extends Controller
 
         ]);
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $wishlistItem = Wishlist::create($request->all());
+        $wishlistItem = Goal::create($request->all());
         $wishlistItem->progress = $progress;
         $wishlistItem->save();
         return response()->json($wishlistItem, 201);
     }
 
-    public function show(Wishlist $wishlist)
+    public function show(Goal $wishlist)
     {
         return response()->json($wishlist);
     }
 
-    public function update(Request $request, Wishlist $wishlist)
+    public function update(Request $request, Goal $wishlist)
     {
         $request->validate([
             'wish_name' => 'required',
@@ -54,8 +54,13 @@ class WishlistController extends Controller
         $wishlist->save();
         return response()->json($wishlist);
     }
+    public function getGoalsByStatus(Request $request, $status)
+    {
+        $goals = Goal::where('status', $status)->get();
+        return response()->json($goals);
+    }
 
-    public function destroy(Wishlist $wishlist)
+    public function destroy(Goal $wishlist)
     {
         $wishlist->delete();
         return response()->json(null, 204);

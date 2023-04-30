@@ -12,11 +12,12 @@ return new class extends Migration
             $collection->id();
             $collection->foreignId('user_id')->constrained('users');
             $collection->foreignId('account_id')->constrained('accounts');
-            $collection->foreignId('category_id')->constrained('categories');
             $collection->decimal('amount', 15, 2);
-            $collection->timestamp('timestamp');
             $collection->text('description')->nullable();
-            $collection->enum('transaction_type', ['expense', 'income', 'transfer']);
+            $collection->enum('transaction_type', ['expense', 'income']);
+            $collection->string('category');
+            $collection->string('payment_method');
+            $collection->date('date');
             $collection->timestamps();
         });
     }

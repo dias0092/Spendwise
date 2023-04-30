@@ -8,21 +8,23 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('wishlists', function (Blueprint $collection) {
+        Schema::create('goals', function (Blueprint $collection) {
             $collection->id();
             $collection->foreignId('user_id')->constrained('users');
-            $collection->string('wish_name');
+            $collection->string('name');
             $collection->decimal('target_amount', 15, 2);
-            $collection->string('description');
+            $collection->date('deadline');
+            $collection->text('description')->nullable();
             $collection->decimal('initial_target_amount', 15, 2);
             $collection->string('color');
             $collection->string('icon');
             $collection->decimal('progress', 5, 2)->default(0);
+            $collection->string('status')->default('active');
             $collection->timestamps();
         });
     }
     public function down(): void
     {
-        Schema::dropIfExists('wishlists');
+        Schema::dropIfExists('goals');
     }
 };

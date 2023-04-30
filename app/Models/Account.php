@@ -20,18 +20,9 @@ class Account extends Model
         return $this->belongsTo(Currency::class);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
 
-    public function plannedPayments()
-    {
-        return $this->hasMany(PlannedPayment::class);
-    }
 }

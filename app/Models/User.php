@@ -54,14 +54,9 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
-    public function wishlist()
+    public function goal()
     {
-        return $this->hasMany(Wishlist::class);
-    }
-
-    public function plannedPayments()
-    {
-        return $this->hasMany(PlannedPayment::class);
+        return $this->hasMany(Goal::class);
     }
 
     public function setAvatarAttribute($value)

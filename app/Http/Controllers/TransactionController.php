@@ -17,9 +17,10 @@ class TransactionController extends Controller
         $request->validate([
             'user_id' => 'required',
             'account_id' => 'required',
-            'category_id' => 'required',
             'amount' => 'required',
-            'timestamp' => 'required',
+            'date' => 'required',
+            'category'=>'required',
+            'payment_method'=>'required',
             'transaction_type' => 'required'
 
         ]);
@@ -38,13 +39,19 @@ class TransactionController extends Controller
         $request->validate([
             'user_id' => 'required',
             'account_id' => 'required',
-            'category_id' => 'required',
             'amount' => 'required',
-            'timestamp' => 'required',
+            'date' => 'required',
+            'category'=>'required',
+            'payment_method'=>'required',
             'transaction_type' => 'required',
         ]);
 
         $transaction->update($request->all());
         return response()->json($transaction);
+    }
+    public function getTransactionsByType(Request $request, $type)
+    {
+        $transactions = Transaction::where('transaction_type', $type)->get();
+        return response()->json($transactions);
     }
 }

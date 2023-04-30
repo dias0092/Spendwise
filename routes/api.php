@@ -1,13 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\PlannedPaymentController;
+use App\Http\Controllers\GoalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 
@@ -21,18 +18,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Account routes
     Route::apiResource('accounts', AccountController::class);
 
-    // Category routes
-    Route::apiResource('categories', CategoryController::class);
-
     // Currency routes
     Route::apiResource('currencies', CurrencyController::class);
 
     // Transaction routes
     Route::apiResource('transactions', TransactionController::class);
-
-    // Wishlist routes
-    Route::apiResource('wishlist', WishlistController::class);
-
-    // PlannedPayment routes
-    Route::apiResource('planned-payments', PlannedPaymentController::class);
+    Route::get('transactions/type/{type}', [TransactionController::class, 'getTransactionsByType']);
+    // Goal routes
+    Route::apiResource('goals', GoalController::class);
+    Route::get('goals/status/{status}', [GoalController::class, 'getGoalsByStatus']);
 });
