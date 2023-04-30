@@ -13,6 +13,7 @@ return new class extends Migration
             $collection->string('name');
             $collection->string('email')->unique();
             $collection->string('password');
+            $collection->string('avatar')->nullable()->default('default-avatar-url');
             $collection->rememberToken();
             $collection->timestamps();
         });

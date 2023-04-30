@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -35,8 +36,19 @@ class UserController extends Controller
             'username' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'required|min:8',
+            'avatar' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        $user->fill($request->only(['name', 'email']));
 
+        if ($request->hasFile('avatar')) {
+            $user->avatar = $request->file('avatar');
+        }
+
+        if ($request->input('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        $user->save();
         $user->update($request->all());
         return response()->json($user);
     }
