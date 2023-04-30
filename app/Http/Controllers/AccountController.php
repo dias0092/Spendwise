@@ -17,9 +17,7 @@ class AccountController extends Controller
         $request->validate([
             'user_id' => 'required',
             'account_name' => 'required',
-            'card_number' => 'required|unique:accounts',
             'currency_id' => 'required',
-            'category_id' => 'required',
         ]);
 
         $account = Account::create($request->all());
@@ -39,9 +37,7 @@ class AccountController extends Controller
     {
         $request->validate([
             'account_name' => 'required',
-            'card_number' => 'required|unique:accounts,card_number,' . $account->id,
             'currency_id' => 'required',
-            'category_id' => 'required',
         ]);
 
         $account->update($request->all());
