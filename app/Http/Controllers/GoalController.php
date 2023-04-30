@@ -16,9 +16,10 @@ class GoalController extends Controller
     {
         $request->validate([
             'user_id' => 'required',
-            'wish_name' => 'required',
-            'timestamp' => 'required',
+            'name' => 'required',
+            'deadline' => 'required',
             'description'=> 'required' ,
+            'status'=>'required',
             'icon' => 'required',
             'target_amount' => 'required',
             'initial_target_amount' =>'required' ,
@@ -40,12 +41,14 @@ class GoalController extends Controller
     public function update(Request $request, Goal $wishlist)
     {
         $request->validate([
-            'wish_name' => 'required',
-            'timestamp' => 'required',
-            'target_amount' => 'required',
+            'user_id' => 'required',
+            'name' => 'required',
+            'deadline' => 'required',
             'description'=> 'required' ,
+            'status'=>'required',
             'icon' => 'required',
-            'initial_target_amount' =>'required',
+            'target_amount' => 'required',
+            'initial_target_amount' =>'required' ,
             'color' => 'required',
         ]);
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;

@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Transaction routes
     Route::apiResource('transactions', TransactionController::class);
     Route::get('transactions/type/{type}', [TransactionController::class, 'getTransactionsByType']);
+
     // Goal routes
     Route::apiResource('goals', GoalController::class);
     Route::get('goals/status/{status}', [GoalController::class, 'getGoalsByStatus']);
