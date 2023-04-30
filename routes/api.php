@@ -9,12 +9,15 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PlannedPaymentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    //User routes
+    Route::apiResource('users', UserController::class);
     // Account routes
     Route::apiResource('accounts', AccountController::class);
 
