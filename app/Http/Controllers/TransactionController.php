@@ -56,4 +56,10 @@ class TransactionController extends Controller
         $transactions = Transaction::where('transaction_type', $type)->get();
         return response()->json($transactions);
     }
+
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->delete();
+        return response()->json(null, 204);
+    }
 }
