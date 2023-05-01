@@ -21,7 +21,8 @@ class TransactionController extends Controller
             'date' => 'required',
             'category'=>'required',
             'payment_method'=>'required',
-            'transaction_type' => 'required'
+            'transaction_type' => 'required',
+            'description' => 'sometimes|required',
 
         ]);
 
@@ -43,6 +44,7 @@ class TransactionController extends Controller
             'date' => 'required',
             'category'=>'required',
             'payment_method'=>'required',
+            'description' => 'sometimes|required',
             'transaction_type' => 'required',
         ]);
 
