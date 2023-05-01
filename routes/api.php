@@ -12,6 +12,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::middleware(['already_authenticated'])->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
 Route::middleware(['auth:sanctum'])->group(function () {
     //User routes
     Route::apiResource('users', UserController::class);
