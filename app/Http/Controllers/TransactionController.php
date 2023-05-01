@@ -17,11 +17,11 @@ class TransactionController extends Controller
         $request->validate([
             'user_id' => 'required',
             'account_id' => 'required',
-            'amount' => 'required',
-            'date' => 'required',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
             'category'=>'required',
             'payment_method'=>'required',
-            'transaction_type' => 'required',
+            'transaction_type' => 'required|in:income,expense',
             'description' => 'sometimes|required',
 
         ]);
@@ -40,12 +40,12 @@ class TransactionController extends Controller
         $request->validate([
             'user_id' => 'required',
             'account_id' => 'required',
-            'amount' => 'required',
-            'date' => 'required',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
             'category'=>'required',
             'payment_method'=>'required',
+            'transaction_type' => 'required|in:income,expense',
             'description' => 'sometimes|required',
-            'transaction_type' => 'required',
         ]);
 
         $transaction->update($request->all());
