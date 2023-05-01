@@ -11,9 +11,9 @@ class Goal extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'value',
+        'target_amount',
         'deadline',
-        'initial_value',
+        'initial_target_amount',
         'icon',
         'color',
         'description',
