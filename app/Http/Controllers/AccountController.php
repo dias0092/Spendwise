@@ -27,9 +27,8 @@ class AccountController extends Controller
     public function show(Request $request, Account $account)
     {
         if ($request->user()->id !== $account->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
-
         return response()->json($account);
     }
 

@@ -33,8 +33,11 @@ class GoalController extends Controller
         return response()->json($goalItem, 201);
     }
 
-    public function show(Goal $goal)
+    public function show(Request $request, Goal $goal)
     {
+        if ($request->user()->id !== $goal->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($goal);
     }
 

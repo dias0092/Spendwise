@@ -30,8 +30,11 @@ class TransactionController extends Controller
         return response()->json($transaction, 201);
     }
 
-    public function show(Transaction $transaction)
+    public function show(Request $request, Transaction $transaction)
     {
+        if ($request->user()->id !== $transaction->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($transaction);
     }
 
