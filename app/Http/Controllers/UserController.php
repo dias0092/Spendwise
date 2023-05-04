@@ -49,7 +49,6 @@ class UserController extends Controller
         }
 
         $user->save();
-        $user->update($request->all());
         return response()->json($user);
     }
 
