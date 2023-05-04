@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class GoalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $goals = Goal::where('user_id', $request->user()->id)->get();
         return response()->json($goals);

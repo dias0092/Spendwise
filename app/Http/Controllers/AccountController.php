@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $accounts = Account::all();
-        return response()->json($accounts);
+        $accounts = Account::where('user_id', $request->user()->id)->get();
+            return response()->json($accounts);
     }
 
     public function store(Request $request)

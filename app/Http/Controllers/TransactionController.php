@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $transactions = Transaction::where('user_id', $request->user()->id)->get();
         return response()->json($transactions);
