@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 
 class GoalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $wishlist = Goal::all();
-        return response()->json($wishlist);
+        $goals = Goal::where('user_id', $request->user()->id)->get();
+        return response()->json($goals);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
             'name' => 'required',
             'deadline' => 'required',
             'description'=> 'required' ,
@@ -26,22 +25,28 @@ class GoalController extends Controller
             'color' => 'required',
 
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+        
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $wishlistItem = Goal::create($request->all());
-        $wishlistItem->progress = $progress;
-        $wishlistItem->save();
-        return response()->json($wishlistItem, 201);
+        $goalItem = Goal::create($requestData);
+        $goalItem->progress = $progress;
+        $goalItem->save();
+        
+        return response()->json($goalItem, 201);
     }
 
-    public function show(Goal $goal)
+    public function show(Request $request, Goal $goal)
     {
+        if ($request->user()->id !== $goal->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($goal);
     }
 
     public function update(Request $request, Goal $goal)
     {
         $request->validate([
-            'user_id' => 'required',
             'name' => 'required',
             'deadline' => 'required',
             'description'=> 'required' ,
@@ -51,16 +56,22 @@ class GoalController extends Controller
             'initial_target_amount' =>'required' ,
             'color' => 'required',
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+        
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $goal->update($request->all());
+        $goal->update($requestData);
         $goal->progress = $progress;
         $goal->save();
+        
         return response()->json($goal);
     }
     public function getGoalsByStatus(Request $request, $status)
     {
-        $goals = Goal::where('status', $status)->get();
-        return response()->json($goals);
+        $goals = Goal::where('status', $status)
+        ->where('user_id', $request->user()->id)
+        ->get();
+    return response()->json($goals);
     }
 
     public function destroy(Goal $goal)

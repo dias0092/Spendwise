@@ -6,30 +6,31 @@ use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $accounts = Account::all();
-        return response()->json($accounts);
+        $accounts = Account::where('user_id', $request->user()->id)->get();
+            return response()->json($accounts);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
             'account_name' => 'required',
             'currency_id' => 'required',
         ]);
 
-        $account = Account::create($request->all());
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+    
+        $account = Account::create($requestData);
         return response()->json($account, 201);
     }
 
     public function show(Request $request, Account $account)
     {
         if ($request->user()->id !== $account->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
-
         return response()->json($account);
     }
 
@@ -40,7 +41,10 @@ class AccountController extends Controller
             'currency_id' => 'required',
         ]);
 
-        $account->update($request->all());
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+    
+        $account->update($requestData);
         return response()->json($account);
     }
 

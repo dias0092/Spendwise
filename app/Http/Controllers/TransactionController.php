@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::where('user_id', $request->user()->id)->get();
         return response()->json($transactions);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
+
             'account_id' => 'required',
             'amount' => 'required|numeric',
             'date' => 'required|date',
@@ -25,20 +25,25 @@ class TransactionController extends Controller
             'description' => 'sometimes|required',
 
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
 
-        $transaction = Transaction::create($request->all());
+        $transaction = Transaction::create($requestData);
         return response()->json($transaction, 201);
     }
 
-    public function show(Transaction $transaction)
+    public function show(Request $request, Transaction $transaction)
     {
+        if ($request->user()->id !== $transaction->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($transaction);
     }
 
     public function update(Request $request, Transaction $transaction)
     {
         $request->validate([
-            'user_id' => 'required',
+
             'account_id' => 'required',
             'amount' => 'required|numeric',
             'date' => 'required|date',
@@ -48,13 +53,18 @@ class TransactionController extends Controller
             'description' => 'sometimes|required',
         ]);
 
-        $transaction->update($request->all());
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+        
+        $transaction->update($requestData);
         return response()->json($transaction);
     }
     public function getTransactionsByType(Request $request, $type)
     {
-        $transactions = Transaction::where('transaction_type', $type)->get();
-        return response()->json($transactions);
+        $transactions = Transaction::where('transaction_type', $type)
+        ->where('user_id', $request->user()->id)
+        ->get();
+    return response()->json($transactions);
     }
 
     public function destroy(Transaction $transaction)
