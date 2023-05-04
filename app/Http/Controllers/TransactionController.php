@@ -8,7 +8,7 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::where('user_id', $request->user()->id)->get();
         return response()->json($transactions);
     }
 
@@ -53,8 +53,10 @@ class TransactionController extends Controller
     }
     public function getTransactionsByType(Request $request, $type)
     {
-        $transactions = Transaction::where('transaction_type', $type)->get();
-        return response()->json($transactions);
+        $transactions = Transaction::where('transaction_type', $type)
+        ->where('user_id', $request->user()->id)
+        ->get();
+    return response()->json($transactions);
     }
 
     public function destroy(Transaction $transaction)

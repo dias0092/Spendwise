@@ -8,8 +8,8 @@ class GoalController extends Controller
 {
     public function index()
     {
-        $wishlist = Goal::all();
-        return response()->json($wishlist);
+        $goals = Goal::where('user_id', $request->user()->id)->get();
+        return response()->json($goals);
     }
 
     public function store(Request $request)
@@ -27,18 +27,18 @@ class GoalController extends Controller
 
         ]);
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $wishlistItem = Goal::create($request->all());
-        $wishlistItem->progress = $progress;
-        $wishlistItem->save();
-        return response()->json($wishlistItem, 201);
+        $goalItem = Goal::create($request->all());
+        $goalItem->progress = $progress;
+        $goalItem->save();
+        return response()->json($goalItem, 201);
     }
 
-    public function show(Goal $wishlist)
+    public function show(Goal $goal)
     {
-        return response()->json($wishlist);
+        return response()->json($goal);
     }
 
-    public function update(Request $request, Goal $wishlist)
+    public function update(Request $request, Goal $goal)
     {
         $request->validate([
             'user_id' => 'required',
@@ -52,10 +52,10 @@ class GoalController extends Controller
             'color' => 'required',
         ]);
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $wishlist->update($request->all());
-        $wishlist->progress = $progress;
-        $wishlist->save();
-        return response()->json($wishlist);
+        $goal->update($request->all());
+        $goal->progress = $progress;
+        $goal->save();
+        return response()->json($goal);
     }
     public function getGoalsByStatus(Request $request, $status)
     {
@@ -63,9 +63,9 @@ class GoalController extends Controller
         return response()->json($goals);
     }
 
-    public function destroy(Goal $wishlist)
+    public function destroy(Goal $goal)
     {
-        $wishlist->delete();
+        $goal->delete();
         return response()->json(null, 204);
     }
 }
