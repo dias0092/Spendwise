@@ -59,8 +59,10 @@ class GoalController extends Controller
     }
     public function getGoalsByStatus(Request $request, $status)
     {
-        $goals = Goal::where('status', $status)->get();
-        return response()->json($goals);
+        $goals = Goal::where('status', $status)
+        ->where('user_id', $request->user()->id)
+        ->get();
+    return response()->json($goals);
     }
 
     public function destroy(Goal $goal)
