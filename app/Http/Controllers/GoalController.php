@@ -15,7 +15,6 @@ class GoalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
             'name' => 'required',
             'deadline' => 'required',
             'description'=> 'required' ,
@@ -26,10 +25,14 @@ class GoalController extends Controller
             'color' => 'required',
 
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+        
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $goalItem = Goal::create($request->all());
+        $goalItem = Goal::create($requestData);
         $goalItem->progress = $progress;
         $goalItem->save();
+        
         return response()->json($goalItem, 201);
     }
 
@@ -44,7 +47,6 @@ class GoalController extends Controller
     public function update(Request $request, Goal $goal)
     {
         $request->validate([
-            'user_id' => 'required',
             'name' => 'required',
             'deadline' => 'required',
             'description'=> 'required' ,
@@ -54,10 +56,14 @@ class GoalController extends Controller
             'initial_target_amount' =>'required' ,
             'color' => 'required',
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+        
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
-        $goal->update($request->all());
+        $goal->update($requestData);
         $goal->progress = $progress;
         $goal->save();
+        
         return response()->json($goal);
     }
     public function getGoalsByStatus(Request $request, $status)

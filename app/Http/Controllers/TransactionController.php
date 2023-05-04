@@ -15,7 +15,7 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
+
             'account_id' => 'required',
             'amount' => 'required|numeric',
             'date' => 'required|date',
@@ -25,8 +25,10 @@ class TransactionController extends Controller
             'description' => 'sometimes|required',
 
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
 
-        $transaction = Transaction::create($request->all());
+        $transaction = Transaction::create($requestData);
         return response()->json($transaction, 201);
     }
 
@@ -41,7 +43,7 @@ class TransactionController extends Controller
     public function update(Request $request, Transaction $transaction)
     {
         $request->validate([
-            'user_id' => 'required',
+
             'account_id' => 'required',
             'amount' => 'required|numeric',
             'date' => 'required|date',
@@ -51,7 +53,10 @@ class TransactionController extends Controller
             'description' => 'sometimes|required',
         ]);
 
-        $transaction->update($request->all());
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+        
+        $transaction->update($requestData);
         return response()->json($transaction);
     }
     public function getTransactionsByType(Request $request, $type)

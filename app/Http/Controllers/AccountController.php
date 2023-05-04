@@ -15,12 +15,14 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
             'account_name' => 'required',
             'currency_id' => 'required',
         ]);
 
-        $account = Account::create($request->all());
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+    
+        $account = Account::create($requestData);
         return response()->json($account, 201);
     }
 
@@ -39,7 +41,10 @@ class AccountController extends Controller
             'currency_id' => 'required',
         ]);
 
-        $account->update($request->all());
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+    
+        $account->update($requestData);
         return response()->json($account);
     }
 
