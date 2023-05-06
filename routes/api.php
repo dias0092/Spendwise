@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MonthlyBalanceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CurrencyController;
@@ -36,4 +37,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Goal routes
     Route::apiResource('goals', GoalController::class);
     Route::get('goals/status/{status}', [GoalController::class, 'getGoalsByStatus']);
+
+    Route::apiResource('monthly-balances', MonthlyBalanceController::class);
 });

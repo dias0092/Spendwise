@@ -58,7 +58,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Goal::class);
     }
-
+    public function monthlyBalances()
+    {
+        return $this->hasMany(MonthlyBalance::class);
+    }
     public function setAvatarAttribute($value)
     {
         if ($value) {
