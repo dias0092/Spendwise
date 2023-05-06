@@ -12,6 +12,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+// Add the forgot-password and reset-password routes here
+Route::post('forgot-password', [UserController::class, 'sendPasswordResetLink']);
+Route::post('reset-password', [UserController::class, 'resetPassword']);
+
 Route::middleware(['already_authenticated'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
