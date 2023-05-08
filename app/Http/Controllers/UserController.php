@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -96,12 +99,25 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $status = Password::sendResetLink($request->only('email'));
+        // Generate the token
+        $token = Str::random(60);
 
-        if ($status == Password::RESET_LINK_SENT) {
-            return response()->json(['message' => 'Password reset link sent']);
-        }
+        // Store the token in the password_resets table with the user's email
+        DB::table('password_resets')->insert([
+            'email' => $user->email,
+            'token' => $token,
+            'created_at' => Carbon::now(),
+        ]);
 
-        return response()->json(['message' => 'Failed to send password reset link'], 500);
+        // Create the password reset link with the token
+        $resetLink = "https://your-frontend-url.com/reset-password?token={$token}";
+
+        // Send the email with the reset link
+        Mail::send('emails.password-reset', ['link' => $resetLink], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('Password Reset Request');
+        });
+
+        return response()->json(['message' => 'We have emailed your password reset link!']);
     }
 }
