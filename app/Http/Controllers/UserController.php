@@ -103,7 +103,7 @@ class UserController extends Controller
         $token = Str::random(60);
 
         // Store the token in the password_resets table with the user's email
-        DB::table('password_resets')->insert([
+        DB::table('password_reset_tokens')->insert([
             'email' => $user->email,
             'token' => $token,
             'created_at' => Carbon::now(),
