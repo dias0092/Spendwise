@@ -9,9 +9,7 @@ class MonthlyBalanceController extends Controller
 {
     public function index(Request $request)
     {
-        $user = $request->user();
-        $monthlyBalances = $user->monthlyBalances;
-
+        $monthlyBalances = MonthlyBalance::where('user_id', $request->user()->id)->get();
         return response()->json($monthlyBalances);
     }
 
@@ -21,16 +19,18 @@ class MonthlyBalanceController extends Controller
             'date' => 'required|date',
             'balance' => 'required|numeric',
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
 
-        $user = $request->user();
-        $monthlyBalance = new MonthlyBalance($request->all());
-        $user->monthlyBalances()->save($monthlyBalance);
-
+        $monthlyBalance = MonthlyBalance::create($requestData);
         return response()->json($monthlyBalance, 201);
     }
 
-    public function show(MonthlyBalance $monthlyBalance)
+    public function show(Request $request, MonthlyBalance $monthlyBalance)
     {
+        if ($request->user()->id !== $monthlyBalance->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($monthlyBalance);
     }
 
@@ -40,8 +40,10 @@ class MonthlyBalanceController extends Controller
             'date' => 'required|date',
             'balance' => 'required|numeric',
         ]);
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
 
-        $monthlyBalance->update($request->all());
+        $monthlyBalance->update($requestData);
         return response()->json($monthlyBalance);
     }
 
