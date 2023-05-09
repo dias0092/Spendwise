@@ -23,5 +23,7 @@ class VerifyCsrfToken extends Middleware
         'api/transactions/*',
         'api/goals',
         'api/goals/*',
+        'api/monthly-balances',
+        'api/monthly-balances/*'
     ];
 }
