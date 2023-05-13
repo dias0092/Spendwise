@@ -37,6 +37,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Goal routes
     Route::apiResource('goals', GoalController::class);
     Route::get('goals/status/{status}', [GoalController::class, 'getGoalsByStatus']);
-
+    // Monthly Balance
     Route::apiResource('monthly-balances', MonthlyBalanceController::class);
+
+
 });

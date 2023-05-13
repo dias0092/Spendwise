@@ -21,7 +21,7 @@ class AccountController extends Controller
 
         $requestData = $request->all();
         $requestData['user_id'] = $request->user()->id;
-    
+
         $account = Account::create($requestData);
         return response()->json($account, 201);
     }
@@ -43,7 +43,7 @@ class AccountController extends Controller
 
         $requestData = $request->all();
         $requestData['user_id'] = $request->user()->id;
-    
+
         $account->update($requestData);
         return response()->json($account);
     }

@@ -87,6 +87,21 @@ class UserController extends Controller
         return response()->json(['message' => 'Failed to reset password'], 500);
     }
 
+    public function updateTheme(Request $request, User $user)
+    {
+        $request->validate([
+            'theme' => 'required|in:light,dark',
+        ]);
+
+        if ($request->user()->id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $user->update(['theme' => $request->theme]);
+
+        return response()->json($user);
+    }
+
     public function sendPasswordResetLink(Request $request)
     {
         $request->validate([
