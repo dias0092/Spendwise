@@ -41,7 +41,8 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'required|min:8',
-            'avatar' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'avatar' => 'nullable',
+            //|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048
         ]);
         $user->fill($request->only(['name', 'email']));
 
