@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Notifications\NewTransactionNotification;
 
 class TransactionController extends Controller
 {
@@ -29,6 +30,8 @@ class TransactionController extends Controller
         $requestData['user_id'] = $request->user()->id;
 
         $transaction = Transaction::create($requestData);
+        // Send notification
+        $request->user()->notify(new NewTransactionNotification($transaction));
         return response()->json($transaction, 201);
     }
 
@@ -55,7 +58,7 @@ class TransactionController extends Controller
 
         $requestData = $request->all();
         $requestData['user_id'] = $request->user()->id;
-        
+
         $transaction->update($requestData);
         return response()->json($transaction);
     }
