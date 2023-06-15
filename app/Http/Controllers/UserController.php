@@ -63,30 +63,55 @@ class UserController extends Controller
         $user->delete();
         return response()->json(null, 204);
     }
+//    public function resetPassword(Request $request)
+//    {
+//        $request->validate([
+//            'email' => 'required|email',
+//            'token' => 'required',
+//            'password' => 'required|min:8|confirmed',
+//        ]);
+//
+//        $status = Password::reset(
+//            $request->only('email', 'token', 'password', 'password_confirmation'),
+//            function ($user, $password) {
+//                $user->forceFill([
+//                    'password' => Hash::make($password),
+//                    'remember_token' => Str::random(60),
+//                ])->save();
+//            }
+//        );
+//
+//        if ($status == Password::PASSWORD_RESET) {
+//            return response()->json(['message' => 'Password reset successful']);
+//        }
+//
+//        return response()->json(['message' => 'Failed to reset password'], 500);
+//    }
+
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
             'token' => 'required',
+            'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);
 
         $status = Password::reset(
             $request->only('email', 'token', 'password', 'password_confirmation'),
-            function ($user, $password) {
+            function ($user, $password) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
             }
         );
 
-        if ($status == Password::PASSWORD_RESET) {
-            return response()->json(['message' => 'Password reset successful']);
-        }
-
-        return response()->json(['message' => 'Failed to reset password'], 500);
+        return $status == Password::PASSWORD_RESET
+            ? response()->json(['status' => __($status)])
+            : response()->json(['email' => __($status)], 500);
     }
+
 
     public function updateTheme(Request $request, User $user)
     {
@@ -105,35 +130,14 @@ class UserController extends Controller
 
     public function sendPasswordResetLink(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
+        $request->validate(['email' => 'required|email']);
 
-        $user = User::where('email', $request->input('email'))->first();
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        // Generate the token
-        $token = Str::random(60);
-
-        // Store the token in the password_resets table with the user's email
-        DB::table('password_reset_tokens')->insert([
-            'email' => $user->email,
-            'token' => $token,
-            'created_at' => Carbon::now(),
-        ]);
-
-        // Create the password reset link with the token
-        $resetLink = "https://your-frontend-url.com/reset-password?token={$token}";
-
-        // Send the email with the reset link
-        Mail::send('emails.password-reset', ['link' => $resetLink], function ($message) use ($user) {
-            $message->to($user->email);
-            $message->subject('Password Reset Request');
-        });
-
-        return response()->json(['message' => 'We have emailed your password reset link!']);
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['status' => __($status)])
+            : response()->json(['email' => __($status)], 500);
     }
 }
