@@ -44,4 +44,3 @@ Spendwise is an ideal app for those looking to improve their financial health by
 
 - `Procfile`: Used by Heroku to start the correct process for your application.
 
-Remember, this is a brief overview of the project's structure. For a comprehensive understanding, please refer to the codebase.
