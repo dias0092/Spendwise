@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MonthlyBalance;
 use Illuminate\Http\Request;
+use App\Notifications\LowBalanceNotification;
+use Illuminate\Support\Facades\Notification;
+
 
 class MonthlyBalanceController extends Controller
 {
@@ -23,6 +26,12 @@ class MonthlyBalanceController extends Controller
         $requestData['user_id'] = $request->user()->id;
 
         $monthlyBalance = MonthlyBalance::create($requestData);
+
+        // Send LowBalanceNotification if balance is less than 1000
+        if ($monthlyBalance->balance < 1000) {
+            Notification::send($request->user(), new LowBalanceNotification());
+        }
+
         return response()->json($monthlyBalance, 201);
     }
 

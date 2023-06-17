@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\Goal;
 use Illuminate\Http\Request;
+use App\Notifications\GoalDeadlineNotification;
+use Illuminate\Support\Facades\Notification;
+use Carbon\Carbon;
 
 class GoalController extends Controller
 {
@@ -27,12 +30,19 @@ class GoalController extends Controller
         ]);
         $requestData = $request->all();
         $requestData['user_id'] = $request->user()->id;
-        
+
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
         $goalItem = Goal::create($requestData);
+
+        // Send GoalDeadlineNotification if deadline is within 3 days
+        $deadline = Carbon::parse($goalItem->deadline);
+        if (Carbon::now()->diffInDays($deadline) <= 3) {
+            Notification::send($request->user(), new GoalDeadlineNotification());
+        }
+
         $goalItem->progress = $progress;
         $goalItem->save();
-        
+
         return response()->json($goalItem, 201);
     }
 
@@ -58,12 +68,12 @@ class GoalController extends Controller
         ]);
         $requestData = $request->all();
         $requestData['user_id'] = $request->user()->id;
-        
+
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
         $goal->update($requestData);
         $goal->progress = $progress;
         $goal->save();
-        
+
         return response()->json($goal);
     }
     public function getGoalsByStatus(Request $request, $status)
