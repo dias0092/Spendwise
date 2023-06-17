@@ -41,9 +41,9 @@ class GoalDeadlineNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('You have 3 days left until your goal deadline.')
-            ->line('Keep up the good work and reach your goal!')
-            ->action('Check Goal', url('/goal'))
+            ->line('You have a goal deadline coming up in 3 days.')
+            ->action('Check Goal', url('/api/goals'))
+            ->line('Make sure you are on track to achieve your goal.')
             ->line('Thank you for using our application!');
     }
 
