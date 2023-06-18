@@ -41,8 +41,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'required|min:8',
-            'avatar' => 'nullable',
-            //|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $user->fill($request->only(['name', 'email']));
 
@@ -63,30 +62,6 @@ class UserController extends Controller
         $user->delete();
         return response()->json(null, 204);
     }
-//    public function resetPassword(Request $request)
-//    {
-//        $request->validate([
-//            'email' => 'required|email',
-//            'token' => 'required',
-//            'password' => 'required|min:8|confirmed',
-//        ]);
-//
-//        $status = Password::reset(
-//            $request->only('email', 'token', 'password', 'password_confirmation'),
-//            function ($user, $password) {
-//                $user->forceFill([
-//                    'password' => Hash::make($password),
-//                    'remember_token' => Str::random(60),
-//                ])->save();
-//            }
-//        );
-//
-//        if ($status == Password::PASSWORD_RESET) {
-//            return response()->json(['message' => 'Password reset successful']);
-//        }
-//
-//        return response()->json(['message' => 'Failed to reset password'], 500);
-//    }
 
     public function resetPassword(Request $request)
     {
