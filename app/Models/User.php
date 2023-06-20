@@ -24,6 +24,9 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
+        'goal_notifications',
+        'transaction_notifications',
+        'monthly_balance_notifications',
     ];
 
     /**

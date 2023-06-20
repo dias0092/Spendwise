@@ -115,4 +115,19 @@ class UserController extends Controller
             ? response()->json(['status' => __($status)])
             : response()->json(['email' => __($status)], 500);
     }
+
+    public function updateSettings(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'goal_notifications' => 'required|boolean',
+            'transaction_notifications' => 'required|boolean',
+            'monthly_balance_notifications' => 'required|boolean',
+        ]);
+
+        $user->update($request->all());
+
+        return response()->json($user);
+    }
 }

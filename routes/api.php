@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //User routes
     Route::apiResource('users', UserController::class);
     Route::put('/users/{user}/theme', [UserController::class, 'updateTheme']);
+    Route::put('users/settings', [UserController::class, 'updateSettings']);
     // Account routes
     Route::apiResource('accounts', AccountController::class);
 

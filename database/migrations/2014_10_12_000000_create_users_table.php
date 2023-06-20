@@ -14,6 +14,9 @@ return new class extends Migration
             $collection->string('email')->unique();
             $collection->string('password');
             $collection->string('avatar')->nullable()->default('default-avatar-url');
+            $collection->boolean('goal_notifications_enabled')->default(true);
+            $collection->boolean('transaction_notifications_enabled')->default(true);
+            $collection->boolean('monthly_balance_notifications_enabled')->default(true);
             $collection->rememberToken();
             $collection->timestamps();
         });
