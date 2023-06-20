@@ -47,7 +47,7 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url("'https://spendwise-niyaztaye-gmailcom.vercel.app/restore-password/'?token=" . $this->token);
+        $url = url("https://spendwise-niyaztaye-gmailcom.vercel.app/restore-password?token=" . $this->token);
 
         return (new MailMessage)
             ->line('You are receiving this email because we received a password reset request for your account.')
