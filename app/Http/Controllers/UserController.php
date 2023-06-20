@@ -67,12 +67,13 @@ class UserController extends Controller
     {
         $request->validate([
             'token' => 'required',
-            'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);
 
+        $credentials = $request->only('token', 'password', 'password_confirmation');
+
         $status = Password::reset(
-            $request->only('email', 'token', 'password', 'password_confirmation'),
+            $credentials,
             function ($user, $password) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($password)
