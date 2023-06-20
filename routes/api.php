@@ -23,8 +23,8 @@ Route::middleware(['already_authenticated'])->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     //User routes
-    Route::apiResource('users', UserController::class);
     Route::put('/users/settings', [UserController::class, 'updateSettings']);
+    Route::apiResource('users', UserController::class);
     // Account routes
     Route::apiResource('accounts', AccountController::class);
 
