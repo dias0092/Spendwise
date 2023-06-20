@@ -121,9 +121,9 @@ class UserController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'goal_notifications' => 'required|boolean',
-            'transaction_notifications' => 'required|boolean',
-            'monthly_balance_notifications' => 'required|boolean',
+            'goal_notifications_enabled' => 'required|boolean',
+            'transaction_notifications_enabled' => 'required|boolean',
+            'monthly_balance_notifications_enabled' => 'required|boolean',
         ]);
 
         $user->update($request->all());
