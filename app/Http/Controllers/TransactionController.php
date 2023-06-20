@@ -30,8 +30,15 @@ class TransactionController extends Controller
         $requestData['user_id'] = $request->user()->id;
 
         $transaction = Transaction::create($requestData);
+
+        // Get the authenticated user
+        $user = $request->user();
+
         // Send notification
-        $request->user()->notify(new NewTransactionNotification($transaction));
+        if ($user->transaction_notifications_enabled) {
+            $user->notify(new NewTransactionNotification($transaction));
+        }
+
         return response()->json($transaction, 201);
     }
 

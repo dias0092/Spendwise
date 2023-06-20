@@ -121,10 +121,17 @@ class UserController extends Controller
         $user = auth()->user();
 
         $request->validate([
+            'name' => 'sometimes|required',
+            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+            'password' => 'sometimes|required|min:8',
             'goal_notifications_enabled' => 'required|boolean',
             'transaction_notifications_enabled' => 'required|boolean',
             'monthly_balance_notifications_enabled' => 'required|boolean',
         ]);
+
+        if ($request->input('password')) {
+            $request->merge(['password' => Hash::make($request->input('password'))]);
+        }
 
         $user->update($request->all());
 

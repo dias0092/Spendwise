@@ -34,10 +34,14 @@ class GoalController extends Controller
         $progress = ($request->initial_target_amount / $request->target_amount) * 100;
         $goalItem = Goal::create($requestData);
 
-        // Send GoalDeadlineNotification if deadline is within 3 days
-        $deadline = Carbon::parse($goalItem->deadline);
-        if (Carbon::now()->diffInDays($deadline) <= 3) {
-            Notification::send($request->user(), new GoalDeadlineNotification());
+        $user = $request->user();
+
+        if ($user->goal_notifications_enabled) {
+            // Send GoalDeadlineNotification if deadline is within 3 days
+            $deadline = Carbon::parse($goalItem->deadline);
+            if (Carbon::now()->diffInDays($deadline) <= 3) {
+                Notification::send($request->user(), new GoalDeadlineNotification());
+            }
         }
 
         $goalItem->progress = $progress;

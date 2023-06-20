@@ -27,11 +27,14 @@ class MonthlyBalanceController extends Controller
 
         $monthlyBalance = MonthlyBalance::create($requestData);
 
-        // Send LowBalanceNotification if balance is less than 1000
-        if ($monthlyBalance->balance < 1000) {
-            Notification::send($request->user(), new LowBalanceNotification());
-        }
+        $user = $request->user();
 
+        // Send LowBalanceNotification if balance is less than 1000
+        if ($user->monthly_balance_notifications_enabled) {
+            if ($monthlyBalance->balance < 1000) {
+                Notification::send($request->user(), new LowBalanceNotification());
+            }
+        }
         return response()->json($monthlyBalance, 201);
     }
 
