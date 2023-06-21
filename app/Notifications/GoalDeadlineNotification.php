@@ -42,7 +42,7 @@ class GoalDeadlineNotification extends Notification
     {
         return (new MailMessage)
             ->line('You have a goal deadline coming up in 3 days.')
-            ->action('Check Goal', url('/api/goals'))
+            ->action('Check Goal', url('https://spendwise-niyaztaye-gmailcom.vercel.app/goals'))
             ->line('Make sure you are on track to achieve your goal.')
             ->line('Thank you for using our application!');
     }

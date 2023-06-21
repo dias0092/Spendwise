@@ -42,7 +42,7 @@ class LowBalanceNotification extends Notification
     {
         return (new MailMessage)
             ->line('Your monthly balance is lower than 1000.')
-            ->action('Check Balance', url('/api/monthly-balances'))
+            ->action('Check Balance', url('https://spendwise-niyaztaye-gmailcom.vercel.app/monthly-balances'))
             ->line('Consider reviewing your expenses and income.')
             ->line('Thank you for using our application!');
     }

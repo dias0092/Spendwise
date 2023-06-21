@@ -15,7 +15,7 @@ class NewTransactionNotification extends Notification
 
     /**
      * Create a new notification instance.
-     * 
+     *
      * @return void
      */
     public function __construct($transaction)
@@ -47,7 +47,7 @@ class NewTransactionNotification extends Notification
             ->line('Transaction Details:')
             ->line('Amount: ' . $this->transaction->amount)
             ->line('Description: ' . $this->transaction->description)
-            ->action('View Transaction', url('/transactions/'.$this->transaction->id))
+            ->action('View Transaction', url('https://spendwise-niyaztaye-gmailcom.vercel.app/transactions/'.$this->transaction->id))
             ->line('Thank you for using our application!');
     }
 
